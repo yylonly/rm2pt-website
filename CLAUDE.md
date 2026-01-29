@@ -5,40 +5,46 @@
 **RM2PT** (Requirements Modeling and Automatic Prototyping) is a CASE tool website built with Jekyll. The site documents and provides resources for the RM2PT tool, which generates prototypes from UML requirements models complemented by OCL formal contracts.
 
 - **Website URL**: http://rm2pt.com
+- **Site Description**: "Automatic Prototyping for Requirements Validation"
 - **Contact**: yilongyang@buaa.edu.cn / rm2pt@yilong.io
 - **Maintained by**: Software Engineering Institute at Beihang University (BUAA)
+- **GitHub**: https://github.com/yylonly
 
 ## Technology Stack
 
-- **Static Site Generator**: Jekyll (GitHub Pages compatible)
+- **Static Site Generator**: Jekyll (GitHub Pages compatible via `github-pages` gem)
 - **Ruby Version**: 2.7.2 (see `.ruby-version`)
-- **CSS Framework**: UIKit (not Bootstrap, despite Gemfile references)
+- **CSS Framework**: UIKit 3.x (loaded from `/assets/css/uikit.min.css`)
+- **JavaScript**: UIKit JS + UIKit Icons (`/assets/js/uikit.min.js`, `/assets/js/uikit-icons.min.js`)
 - **Markdown**: Kramdown with GitHub Flavored Markdown (GFM)
 - **Syntax Highlighting**: Rouge
 - **Package Manager**: Bundler with gems from `gems.ruby-china.com`
+- **Analytics**: Google Analytics (UA-42915048-5)
 
 ## Directory Structure
 
 ```
 rm2pt-website/
-├── _config.yml          # Jekyll site configuration
+├── _config.yml          # Jekyll site configuration (restart server after changes)
 ├── _data/
-│   └── navigation.yml   # Main navigation menu structure
+│   └── navigation.yml   # Main navigation menu structure (3-level hierarchy)
 ├── _includes/           # Reusable HTML components
-│   ├── head.html        # HTML head with UIKit CSS/JS
-│   ├── header.html      # Navigation bar and off-canvas menu
+│   ├── head.html        # HTML head with UIKit CSS/JS + Google Analytics
+│   ├── header.html      # Navigation bar (desktop) + off-canvas menu (mobile)
 │   ├── footer.html      # Site footer
 │   ├── img.html         # Image include helper
-│   └── video.html       # Video embed helper
-├── _layouts/            # Page templates
-│   ├── default.html     # Base layout
+│   ├── video.html       # Video embed helper
+│   ├── disqus_comments.html  # Disqus commenting (if enabled)
+│   └── google-analytics.html # GA tracking code
+├── _layouts/            # Page templates (all extend default.html)
+│   ├── default.html     # Base layout with uk-container wrapper
 │   ├── home.html        # Homepage layout
-│   ├── page.html        # Standard page layout
+│   ├── page.html        # Standard page with breadcrumb navigation
 │   ├── post.html        # Blog post layout
 │   ├── category.html    # Category listing
 │   └── sitemap.html     # Sitemap layout
-├── _posts/              # Blog-style content (categorized)
-│   ├── CaseStudy/       # RM2PT case studies (ATM, CoCoME, etc.)
+├── _posts/              # Blog-style content (7 categories)
+│   ├── CaseStudy/       # RM2PT case studies (ATM, CoCoME, LibMS, Loan)
 │   ├── Cloud/           # Cloud-related documentation
 │   ├── DevOps/          # CI/CD, Git, IDE documentation
 │   ├── Documentation/   # Developer documentation
@@ -47,89 +53,165 @@ rm2pt-website/
 │   └── System/          # System administration
 ├── _sass/               # SCSS stylesheets
 │   └── mcloud/          # Custom theme styles
-├── assets/              # Static assets (CSS, JS)
-│   └── css/uikit.min.css
-├── data/                # PDF documents, JAR files
+├── assets/              # Static assets
+│   ├── css/uikit.min.css
+│   └── js/uikit.min.js, uikit-icons.min.js
+├── data/                # Research documents and resources
+│   ├── *.pdf            # Research papers (ICSE, RE, FMAC, etc.)
+│   ├── *.jar            # Java libraries
+│   └── imgs/, wiiu/     # Additional resources
 ├── imgs/                # Image assets (organized by feature)
+│   ├── InputGen/        # InputGen tool images
 │   ├── RM2Doc/          # RM2Doc feature images
 │   ├── RM2DM/           # RM2DM feature images
+│   ├── RM2EIS/          # RM2EIS feature images
 │   ├── RM2MS/           # RM2MS feature images
-│   └── ...
+│   ├── RapidMS/         # RapidMS feature images
+│   ├── ValidGen/        # ValidGen feature images
+│   ├── RM2PTDevInstall/ # Developer installation images
+│   └── [case study images at root level]
 ├── page/                # Static pages (main content)
-│   ├── about.md         # About page
-│   ├── download.md      # Downloads page
-│   ├── casestudy/       # Case study pages
-│   ├── tutorial/        # User and developer tutorials
-│   │   ├── user/        # User tutorials
+│   ├── about.md         # About page with team information
+│   ├── download.md      # Downloads page (current v1.2.3)
+│   ├── sitemap.md       # Sitemap page
+│   ├── casestudy/       # Case study detail pages
+│   ├── tutorial/        # Tutorials
+│   │   ├── user/        # 9 user tutorials
 │   │   └── dev/         # Developer tutorials
-│   ├── rm2doc/          # RM2Doc feature documentation
-│   ├── rm2dm/           # RM2DM feature documentation
-│   ├── rm2eis/          # RM2EIS feature documentation
-│   ├── rm2ms/           # RM2MS feature documentation
-│   ├── rapidms/         # RapidMS feature documentation
-│   ├── validgen/        # ValidGen feature documentation
-│   ├── inputgen/        # InputGen feature documentation
-│   └── overview/        # Overview pages
-├── index.md             # Homepage content
+│   ├── overview/        # Overview pages (fund, seminar, publication)
+│   ├── inputgen/        # InputGen + InitialGPT documentation
+│   ├── rm2doc/          # RM2Doc documentation
+│   ├── rm2dm/           # RM2DM documentation
+│   ├── rm2eis/          # RM2EIS documentation
+│   ├── rm2ms/           # RM2MS documentation
+│   ├── rapidms/         # RapidMS documentation
+│   ├── validgen/        # ValidGen documentation
+│   ├── istar/           # iStar modeler
+│   ├── ocl2nl/          # OCL to Natural Language
+│   └── UseCaseEditor/   # Use Case Editor
+├── propocess/           # (Note: appears to be typo for "process")
+├── index.md             # Homepage content (layout: home)
 ├── Gemfile              # Ruby dependencies
-└── mcloud.gemspec       # Gem specification (theme)
+├── mcloud.gemspec       # Gem specification
+└── favicon.ico          # Site favicon
 ```
 
-## Key Configuration Files
+## Key Configuration (`_config.yml`)
 
-### `_config.yml`
-- `title`: "Requirements Modeling and Automatic Prototyping"
-- `shorttitle`: "RM2PT"
-- `baseurl`: "" (root deployment)
-- `url`: "http://rm2pt.com"
-- `permalink`: `/:categories/:title/`
+**Important**: Changes to `_config.yml` require server restart.
 
-### `_data/navigation.yml`
-Defines the hierarchical navigation menu structure with sections:
-- Overview (Fund, Seminar, Publication)
-- Get Started (User/Developer Tutorials)
-- Case Studies
-- Advanced Features (Requirements Modeling, Validation, Code Generation)
-- Research
-- Documentation
-- Downloads
-- About
+```yaml
+title: Requirements Modeling and Automatic Prototyping
+shorttitle: RM2PT
+description: Automatic Prototyping for Requirements Validation
+date: 2013-2023
+email: yilongyang@buaa.edu.cn
+url: "http://rm2pt.com"
+baseurl: ""
+github_username: yylonly
+permalink: /:categories/:title/
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+```
+
+## Navigation Structure (`_data/navigation.yml`)
+
+Three-level hierarchy with special URL patterns:
+
+```yaml
+# Level 1: Section
+- section_name: "Section Name"
+  section_url: "url-segment"
+  ispage: true  # Direct link (no dropdown)
+
+# Level 2: Subsection
+  subsectons:  # Note: typo in actual file, "subsectons" not "subsections"
+    - sub_name: "Subsection Name"
+      subsection_url: "sub-url"
+
+# Level 3: Sub-subsection
+      subsubsection:
+        - name: "Item Name"
+          subsubsection_url: "../../../advs/feature"  # Relative URL pattern
+          ispage: true
+```
+
+**Navigation Sections:**
+1. Overview (Fund, Seminar, Publication)
+2. Get Started (User/Developer Tutorials)
+3. Case Studies (direct link)
+4. Advanced Features (Requirements Modeling, Validation, Code Generation tools)
+5. Research (MDA Foundation, Applications, ASE, ISE)
+6. Documentation (User/Developer docs)
+7. Downloads (direct link)
+8. About (direct link)
 
 ## Content Conventions
 
 ### Page Front Matter
-Standard page front matter:
 ```yaml
 ---
 layout: page
 title: Page Title
 permalink: /url-path/
+level: [Optional, Breadcrumb, Levels]  # Used in breadcrumb navigation
 ---
 ```
 
 ### Post Front Matter
-Posts in `_posts/` follow Jekyll naming convention `YYYY-MM-DD-title.md`:
+Posts follow Jekyll naming: `_posts/Category/YYYY-MM-DD-title.md`
 ```yaml
 ---
 layout: post
 title: Post Title
-description: Brief description
+description: Brief description for listings
 date: 2021-05-24 14:43:17.000000000 +08:00
 type: post
-img: /imgs/image.png
-categories: [CaseStudy]
+img: /imgs/thumbnail.jpg  # Thumbnail image
+categories: [CaseStudy]   # Must match folder name
 ---
 ```
 
-### Image References
-- Store images in `/imgs/` or feature-specific subdirectories
-- Reference with absolute paths: `/imgs/feature/image.png`
-- For pages in subdirectories, use relative paths: `../../imgs/feature/image.png`
+### Image Patterns
 
-### Navigation Links
-- `ispage: true` indicates a direct page link
-- `subsection_url` defines the URL segment
-- Use `../../../advs/` pattern for linking to advanced features from nested locations
+**Absolute paths** (recommended for root-level pages):
+```markdown
+![Alt text](/imgs/feature/image.png)
+<img src="/imgs/feature/image.png" alt="Alt text" style="zoom: 50%;" />
+```
+
+**Relative paths** (for pages in subdirectories like `/page/feature/`):
+```markdown
+<img src="../../imgs/Feature/image.png" alt="Alt text" width="80%" height="80%" />
+```
+
+**Common inline styles:**
+- `style="zoom: 50%;"` - Scale images
+- `width="80%" height="80%"` - Percentage sizing
+- `class="center"` - Center alignment
+
+### OCL Contract Code Blocks
+Case studies use fenced code blocks for OCL contracts:
+````markdown
+```
+Contract SystemName::operationName(param: Type) : ReturnType {
+    definition:
+        variable:Type = Expression
+    precondition:
+        condition
+    postcondition:
+        result = value
+}
+```
+````
 
 ## Development Workflow
 
@@ -138,122 +220,133 @@ categories: [CaseStudy]
 # Install dependencies
 gem install bundler jekyll
 
-# Install project gems
+# Install project gems (uses gems.ruby-china.com mirror)
 bundle install
 
 # Run local server
 bundle exec jekyll serve
-```
-The site will be available at `http://localhost:4000`
 
-### Adding Content
+# Server runs at http://localhost:4000
+# Note: _config.yml changes require restart
+```
+
+### Adding New Content
 
 #### New Page
-1. Create markdown file in appropriate `/page/` subdirectory
-2. Add front matter with `layout: page`, `title`, and `permalink`
-3. If navigation is needed, update `_data/navigation.yml`
+1. Create: `/page/feature/feature.md`
+2. Front matter: `layout: page`, `title`, `permalink: /feature/`
+3. Images: `/imgs/Feature/`
+4. Update `_data/navigation.yml` if needed
 
-#### New Post/Article
-1. Create file in `_posts/Category/YYYY-MM-DD-title.md`
-2. Add required front matter including `categories`
-3. Posts are automatically indexed by category
+#### New Case Study
+1. Create: `_posts/CaseStudy/YYYY-MM-DD-name.md`
+2. Required sections:
+   - Use Case Diagram
+   - System Sequence Diagrams
+   - Conceptual Class Diagram
+   - Main Contracts (OCL code blocks)
+3. Add images to `/imgs/` with naming: `casename-diagram-type.png`
+4. Link to: https://github.com/RM2PT/CaseStudies
 
-#### New Feature Documentation
-1. Create directory under `/page/` (e.g., `/page/newfeature/`)
-2. Create main documentation file (e.g., `newfeature.md`)
-3. Store related images in `/imgs/NewFeature/`
-4. Add navigation entry in `_data/navigation.yml` under Advanced Features
+#### New Advanced Feature Tool
+1. Create directory: `/page/toolname/`
+2. Create pages: `toolname.md`, `toolname-tutorial.md`
+3. Images: `/imgs/ToolName/`
+4. Navigation: Add to "Advanced Features" section in `_data/navigation.yml`
+5. Use relative URL pattern: `../../../advs/toolname`
 
-### Adding Images
-1. Place images in `/imgs/` or appropriate subdirectory
-2. Use consistent naming (kebab-case or descriptive names)
-3. Optimize images before committing (large images slow the site)
+### Update Downloads
+Edit `/page/download.md`:
+- Current version: 1.2.3
+- Update GitHub release links
+- Platform links: MacOS, Windows, Linux
+- DevPack offline package link
 
-## Important Patterns
+## UIKit Framework Reference
 
-### UIKit CSS Classes
-The site uses UIKit framework (not Bootstrap). Common classes:
-- `uk-container` - Content container
-- `uk-card` - Card component
-- `uk-navbar` - Navigation bar
-- `uk-article` - Article wrapper
-- `uk-breadcrumb` - Breadcrumb navigation
-- `uk-visible@m` / `uk-hidden@m` - Responsive visibility
+### Common Classes
+```html
+<!-- Layout -->
+<div class="uk-container">           <!-- Content container -->
+<nav class="uk-navbar">              <!-- Navigation bar -->
+<article class="uk-article">         <!-- Article wrapper -->
 
-### Layout Inheritance
+<!-- Navigation -->
+<ul class="uk-breadcrumb">           <!-- Breadcrumb navigation -->
+<ul class="uk-nav uk-nav-default">   <!-- Default nav list -->
+<div class="uk-navbar-dropdown">     <!-- Dropdown menu -->
+<div id="offcanvas-nav" uk-offcanvas><!-- Mobile off-canvas menu -->
+
+<!-- Responsive -->
+<div class="uk-visible@m">           <!-- Visible on medium+ screens -->
+<div class="uk-hidden@m">            <!-- Hidden on medium+ screens -->
+
+<!-- Typography -->
+<p class="uk-text-lead">             <!-- Lead paragraph -->
+<span class="uk-text-bold">          <!-- Bold text -->
+<span class="uk-text-lighter">       <!-- Lighter text -->
+
+<!-- Components -->
+<span uk-icon="check">               <!-- Icon -->
+<a class="uk-logo">                  <!-- Logo link -->
 ```
-default.html
-├── home.html (homepage)
-├── page.html (standard pages)
+
+### Layout Hierarchy
+```
+default.html (base: uk-container wrapper)
+├── home.html (index.md)
+├── page.html (uk-article + uk-breadcrumb)
 ├── post.html (blog posts)
-├── category.html (category listings)
-└── sitemap.html (sitemap)
+├── category.html (post listings)
+└── sitemap.html
 ```
-
-### Liquid Template Variables
-- `{{ site.title }}` - Site title
-- `{{ site.description }}` - Site description
-- `{{ page.title }}` - Current page title
-- `{{ content }}` - Page content
-- `{{ site.data.navigation }}` - Navigation data
 
 ## Common Tasks for AI Assistants
 
-### Update Downloads
-Edit `/page/download.md` to update:
-- Version numbers
-- Download links (GitHub releases)
-- Platform-specific instructions
-
-### Add New Tool/Feature Page
-1. Create directory: `/page/toolname/`
-2. Create main page: `/page/toolname/toolname.md`
-3. Add images to: `/imgs/ToolName/`
-4. Update `_data/navigation.yml` in appropriate section
-5. Use `permalink: /toolname/` or appropriate URL
-
-### Update Navigation
-Edit `_data/navigation.yml`:
-- `section_name` / `section_url` for main sections
-- `sub_name` / `subsection_url` for subsections
-- `name` / `subsubsection_url` for sub-subsections
-- Set `ispage: true` for direct links
-
-### Add Case Study
-1. Create post in `_posts/CaseStudy/YYYY-MM-DD-name.md`
-2. Include: Use Case Diagram, System Sequence Diagrams, Conceptual Class Diagram, Main Contracts
-3. Add images to `/imgs/`
-4. Link to GitHub case study repository
-
 ### Update Team Information
-Edit `/page/about.md` to add/update team members in appropriate research groups
+Edit `/page/about.md` - organized by research groups:
+- BUAA Software Group (main team)
+- NEPU Group, BUAA GUI Group, BJUT Group, MPI Group, GXNU Group, ECNU Group
+
+### Fix Navigation Links
+Common issue: Items without `subsubsection_url` show as disabled (grayed out).
+To enable: Add `subsubsection_url` and `ispage: true`
+
+### Add Tutorial
+1. Create in `/page/tutorial/user/` or `/page/tutorial/dev/`
+2. Follow naming: `descriptive-name.md`
+3. Add to navigation under "Get Started" section
 
 ## Build and Deployment
 
-The site is configured for GitHub Pages deployment:
-- Uses `github-pages` gem for compatibility
-- No custom build step required
-- Push to main branch triggers automatic deployment
+- **Platform**: GitHub Pages
+- **Gem**: `github-pages` for compatibility
+- **Deployment**: Automatic on push to main branch
+- **No build step**: Jekyll builds automatically
 
 ## Troubleshooting
 
-### Common Issues
-1. **Jekyll serve fails**: Check Ruby version (2.7.2) and run `bundle install`
-2. **Missing styles**: Ensure UIKit CSS is loaded from `/assets/css/uikit.min.css`
-3. **Broken navigation**: Verify `_data/navigation.yml` YAML syntax
-4. **Image not displaying**: Check path (absolute from root or correct relative path)
-
-### Gem Source Note
-The Gemfile uses Chinese mirror `gems.ruby-china.com`. For international use, may need to change to `rubygems.org`.
+| Issue | Solution |
+|-------|----------|
+| Jekyll serve fails | Check Ruby version (2.7.2), run `bundle install`, ensure `webrick` gem |
+| Missing styles | Verify `/assets/css/uikit.min.css` exists and loads |
+| Broken navigation | Check `_data/navigation.yml` YAML syntax (watch for typo "subsectons") |
+| Image not showing | Check path - use absolute `/imgs/` or relative `../../imgs/` |
+| Config changes not applied | Restart `jekyll serve` |
+| Gem source issues | Change `gems.ruby-china.com` to `rubygems.org` for international use |
 
 ## File Naming Conventions
 
-- Markdown files: `lowercase-with-hyphens.md`
-- Image files: `descriptive-name.png` or `feature-component.png`
-- Directories: `lowercase` or `CamelCase` (existing mixed convention)
-- Posts: `YYYY-MM-DD-title.md`
+| Type | Convention | Example |
+|------|------------|---------|
+| Pages | lowercase-hyphenated | `create-new-project.md` |
+| Posts | YYYY-MM-DD-title | `2021-05-24-atm.md` |
+| Images | feature-description | `atm-ucd.png`, `rm2doc-overview.png` |
+| Directories | lowercase or CamelCase | `inputgen/`, `RM2Doc/` |
 
-## Related Repositories
+## Related Resources
 
 - **RM2PT Releases**: https://github.com/RM2PT/Release
 - **Case Studies**: https://github.com/RM2PT/CaseStudies
+- **InputGen UpdateSite**: https://github.com/RM2PT/InputGen-UpdateSite
+- **Contact**: rm2pt@yilong.io
